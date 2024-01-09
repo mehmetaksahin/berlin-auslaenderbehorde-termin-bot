@@ -61,34 +61,41 @@ public class Section2ServiceSelectionHandler {
     }
 
     public boolean fillAndSendForm() {
+        LOGGER.info("aksahin Section2ServiceSelectionHandler - fillAndSendForm basladi");
         fillForm();
+        LOGGER.info("aksahin Section2ServiceSelectionHandler - fillAndSendForm - fillForm basarili sekilde bitti");
         while (isSessionActive()) {
-            LOGGER.info("Session is active");
+            LOGGER.info("aksahin Section2ServiceSelectionHandler - fillAndSendForm - while dongusune girdi ve sendForm yapacak");
             sendForm();
+            LOGGER.info("aksahin Section2ServiceSelectionHandler - fillAndSendForm - sendForm bitti");
             DriverUtils.waitUntilFinished(driver);
 
-            if (isDateSelectionOpened()) {
-                if (isErrorMessageShow()) {
-                    LOGGER.info("Calender page is opened but there is alert or error");
+            boolean isDateSelectionOpened = isDateSelectionOpened();
+            LOGGER.info("aksahin Section2ServiceSelectionHandler - fillAndSendForm - isDateSelectionOpened: {}", isDateSelectionOpened);
+            if (isDateSelectionOpened) {
+                boolean isErrorMessageShow = isErrorMessageShow();
+                LOGGER.info("aksahin Section2ServiceSelectionHandler - fillAndSendForm - isErrorMessageShow: {}", isErrorMessageShow);
+                if (isErrorMessageShow) {
+                    LOGGER.info("aksahin Section2ServiceSelectionHandler - fillAndSendForm - isErrorMessageShow true yani Calender page is opened but there is alert or error");
                     return false;
                 } else {
-                    LOGGER.info("Calender page is opened and there is no alert");
+                    LOGGER.info("aksahin Section2ServiceSelectionHandler - fillAndSendForm - isErrorMessageShow false yani Calender page is opened and there is no alert");
                     return true;
                 }
-
             }
+            LOGGER.info("aksahin Section2ServiceSelectionHandler - fillAndSendForm - isDateSelectionOpened false yani if bloguna girmemis");
             try {
                 Thread.sleep(AppointmentFinder.FORM_REFRESH_PERIOD_IN_SECONDS * 1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
-        LOGGER.info("Session is not active anymore");
+        LOGGER.info("aksahin Section2ServiceSelectionHandler - fillAndSendForm - while dongusunden cikti yani Session is not active anymore");
         return false;
     }
 
     private void fillForm() {
-        LOGGER.info("Starting to fill the form in section 2");
+        LOGGER.info("aksahin Section2ServiceSelectionHandler fillForm");
         selectCitizenshipValue();
         selectNumberOfApplicants();
         selectFamilyStatus();
@@ -104,6 +111,7 @@ public class Section2ServiceSelectionHandler {
     }
 
     private void selectCitizenshipValue() {
+        LOGGER.info("aksahin Section2ServiceSelectionHandler fillForm - selectCitizenshipValue basladi");
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
         String elementDescription = Section2FormElementsEnum.COUNTRY.name();
         MDC.put(MdcVariableEnum.elementDescription.name(), elementDescription);
@@ -133,6 +141,8 @@ public class Section2ServiceSelectionHandler {
                 return false;
             }
         });
+
+        LOGGER.info("aksahin Section2ServiceSelectionHandler fillForm - selectCitizenshipValue bitti");
     }
 
     private void saveCountries(Select select, String fileName) {
@@ -153,6 +163,7 @@ public class Section2ServiceSelectionHandler {
     }
 
     private void selectCitizenshipValueOfFamilyMember() {
+        LOGGER.info("aksahin Section2ServiceSelectionHandler fillForm - selectCitizenshipValueOfFamilyMember basladi");
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
         String elementDescription = Section2FormElementsEnum.COUNTRY_OF_FAMILY_MEMBER.name();
         MDC.put(MdcVariableEnum.elementDescription.name(), elementDescription);
@@ -179,9 +190,11 @@ public class Section2ServiceSelectionHandler {
                 return false;
             }
         });
+        LOGGER.info("aksahin Section2ServiceSelectionHandler fillForm - selectCitizenshipValueOfFamilyMember bitti");
     }
 
     private void selectNumberOfApplicants() {
+        LOGGER.info("aksahin Section2ServiceSelectionHandler fillForm - selectNumberOfApplicants basladi");
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
         String elementDescription = Section2FormElementsEnum.APPLICANT_COUNT.name();
         MDC.put(MdcVariableEnum.elementDescription.name(), elementDescription);
@@ -198,10 +211,11 @@ public class Section2ServiceSelectionHandler {
                 return false;
             }
         });
-
+        LOGGER.info("aksahin Section2ServiceSelectionHandler fillForm - selectNumberOfApplicants bitti");
     }
 
     private void selectFamilyStatus() {
+        LOGGER.info("aksahin Section2ServiceSelectionHandler fillForm - selectFamilyStatus basladi");
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
         String elementDescription = FAMILY_STATUS.name();
         MDC.put(MdcVariableEnum.elementDescription.name(), elementDescription);
@@ -219,9 +233,11 @@ public class Section2ServiceSelectionHandler {
 
             }
         });
+        LOGGER.info("aksahin Section2ServiceSelectionHandler fillForm - selectFamilyStatus bitti");
     }
 
     protected void clickServiceType() {
+        LOGGER.info("aksahin Section2ServiceSelectionHandler fillForm - clickServiceType basladi");
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
         String elementDescription = SERVICE_TYPE.name();
         MDC.put(MdcVariableEnum.elementDescription.name(), elementDescription);
@@ -237,9 +253,11 @@ public class Section2ServiceSelectionHandler {
                 return false;
             }
         });
+        LOGGER.info("aksahin Section2ServiceSelectionHandler fillForm - clickServiceType bitti");
     }
 
     private void clickVisaPurpose() {
+        LOGGER.info("aksahin Section2ServiceSelectionHandler fillForm - clickVisaPurpose basladi");
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
         LOGGER.debug("Starting to: {}", methodName);
         String elementDescription = VISA_PURPOSE.name();
@@ -254,9 +272,11 @@ public class Section2ServiceSelectionHandler {
                 return false;
             }
         });
+        LOGGER.info("aksahin Section2ServiceSelectionHandler fillForm - clickVisaPurpose bitti");
     }
 
     private void clickToVisa() {
+        LOGGER.info("aksahin Section2ServiceSelectionHandler fillForm - clickToVisa basladi");
         String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
         LOGGER.debug("Starting to: {}", methodName);
 
@@ -269,6 +289,7 @@ public class Section2ServiceSelectionHandler {
                 return false;
             }
         });
+        LOGGER.info("aksahin Section2ServiceSelectionHandler fillForm - clickToVisa bitti");
     }
 
     private void sendForm() {

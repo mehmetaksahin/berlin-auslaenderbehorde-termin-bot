@@ -52,11 +52,14 @@ public class AppointmentFinder {
 
         executor.scheduleWithFixedDelay(() -> {
             try {
+                LOGGER.info("AKSAHIN - AppointmentFinder - CompletableFuture basladi");
                 run();
+                LOGGER.info("AKSAHIN - AppointmentFinder - CompletableFuture RUN bitti");
                 if (executor.isShutdown()) {
                     future.complete(true);
                 }
             } catch (Exception e) {
+                LOGGER.error("AKSAHIN - AppointmentFinder - CompletableFuture hata", e);
                 LOGGER.error("Failed to finish task", e);
                 if (retryCount == MAX_RETRY) {
                     LOGGER.warn("Retry: {}, max retry count:{} reached, quitting.", retryCount, MAX_RETRY);
@@ -74,6 +77,7 @@ public class AppointmentFinder {
     }
 
     private void run() {
+        LOGGER.info("AKSAHIN - AppointmentFinder - RUN baslıyooooor");
         getHomePage();
         DriverUtils.waitUntilFinished(driver);
 
@@ -86,11 +90,14 @@ public class AppointmentFinder {
         }
         MDC.put(MdcVariableEnum.sessionUrl.name(), sessionUrl);
 
-
+        LOGGER.info("AKSAHIN - AppointmentFinder - section1 basarili bitmis");
         Section2ServiceSelectionHandler section2ServiceSelectionHandler = new Section2ServiceSelectionHandler(visaFormTO, driver);
+        LOGGER.info("AKSAHIN - AppointmentFinder - section2 Section2ServiceSelectionHandler basliyor");
         boolean result = section2ServiceSelectionHandler.fillAndSendForm();
+        LOGGER.info("AKSAHIN - AppointmentFinder - section2 basarili bitmis result: {}", result);
         if (result) {
-            Section3DateSelectionHandler section3DateSelectionHandler = new Section3DateSelectionHandler(driver);
+            //Section3DateSelectionHandler section3DateSelectionHandler = new Section3DateSelectionHandler(driver);
+            LOGGER.info("AKSAHIN - AppointmentFinder - OK EVERYTHING IS FINE yani simdi notification atacak");
             notificationAdapter.triggerNotification(sessionUrl);
             IoUtils.savePage(driver, "date_selection_success");
             executor.shutdown();
